@@ -1,4 +1,3 @@
-
   # Step-by-Step Guide: Creating a Ready-to-Use Ubuntu Cloud Image on Proxmox!!
 
 
@@ -49,13 +48,9 @@ $ export CUSTOM_USER_PASSWORD=password
 We will utilize the  **qm create**  command to generate a new VM. We have assigned it the ID 8010 and named it “ubuntu-2404-cloudinit-template”. The OS type has been set as Linux 2.6/3.x/4.x, while the memory has been allocated 1024 MB.
 
 ```bash
-$ qm create 8010 --name "ubuntu-2404-cloudinit-template" --ostype l26 \  
-    --memory 1024 \  
-    --agent 1 \  
-    --bios ovmf --machine q35 --efidisk0 local-lvm:0,pre-enrolled-keys=0 \  
-    --cpu host --socket 1 --cores 1 \  
-    --vga serial0 --serial0 socket  \  
-    --net0 virtio,bridge=vmbr0
+$ qm create 8010 --name "ubuntu-2404-cloudinit-template" --ostype l26 \
+    --memory 1024 --agent 1 --bios ovmf --machine q35 --efidisk0 local-lvm:0,pre-enrolled-keys=0 --cpu host \
+    --socket 1 --cores 1 --vga serial0 --serial0 socket --net0 virtio,bridge=vmbr0
 ```
 
 Feel free to customize the VM ID  **8010**  according to your preference, ensuring that you replace it in subsequent commands as well. The allocated memory does not play a critical role since this specific VM will not start. However, you must adjust the RAM for cloned VMs as needed. Enabling the  **— agent**  option ensures the Qemu Guest Agent is active, offering various benefits such as retrieving IP addresses of interfaces.
