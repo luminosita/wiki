@@ -4,6 +4,7 @@ Proxmox API tokens:
 Priviledge Separation - unchecked
 
 VM Template Config
+```
 agent: 1
 bios: ovmf
 boot: order=virtio0;ide2
@@ -34,9 +35,12 @@ template: 1
 vga: serial0
 virtio0: local-lvm:base-8010-disk-1,discard=on,size=32G
 vmgenid: 870ed80e-4fd8-4573-a1f0-4cdf02e1e48c
+```
 
 root@proxmox:/var/lib/vz/snippets#
+
 cat user.yaml 
+```
 #cloud-config
 users:
   - name: k3s
@@ -47,13 +51,14 @@ users:
     lock-passwd: false
     ssh-authorized-keys:
       - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDFbfs3Ga7TDc5UrcGR4Ujs/s6vbWGXzNeizYaYe3qkANHrY3HM3D2BFKwH+VGukXdYtPT5jkBxX38/739NYCYTtXoD9OsA8bD4DoHajtcJrbp6ZYMwnFvnpIrT3GvmM8KWFKbOWAVQY2rc1tIuObLZciS+pUfSloEf4KHbWth/rBA/sPZEwBJHjHacMGdevNb1RdKIwu6K1qHu9jvtsZswxNalINQb9unYnkJ7yoOrV/weASv/NEDEGJreJ7o1nS9VRAVPgJd0pcWOxRHbvAOwkW20oQ2mU0LMHw+RcSS+IY22g4fXrgxMXx+eEC6wSY7Y6v9Pw0e+qeFDNVJ2hMfo2f2iMgK+21Je8/gXAxTNdEpu64DWKQeplLEyb4ksEBLq/CrcH3bfZNoxOris/g+meXm/J+U11sFbBAFFwh4prf7o4PZZFqhjxck4p95pl+kpL5oy/qiG4qUteUTgizQKZkjK85YWhcLTYsDltjVxYArKrUYuEZQA7awgn6aXnauhzXeT+aCCL6yBzuYSsLK+KYGwdOtBu0hdn0i1d4aCkI+2KlAdEPMrtDsbv8n9JWWQmQkQVSwaTWvVQpMeSRfqOjZLRXtkQHcjCR3tUbE4XG4d7dyDD1iCsEA2i8BQXzxdGGyu4NsDo368k8m7h9NT1vJkEOuTtsXYDNkRXm/54Q== milosh@Gianni
-
+```
 cat vendor.yaml
+```
 #cloud-config  
 runcmd:  
     - apt update  
     - apt install -y qemu-guest-agent  
     - systemctl start qemu-guest-agent  
     - reboot  
-
+```
 
