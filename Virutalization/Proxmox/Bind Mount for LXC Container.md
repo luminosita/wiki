@@ -51,7 +51,7 @@ $ pct set 100 -mp0 /mnt/xxx,mp=/ct-xxx
 
 Host mount /mnt/xxx will be accessible through LXC container as /ct-xxx
 
-#### Start LXC container and create user with GID/GID = 1000
+#### Start LXC container and create user with UID/GID = 1000
 
 ```
 $ adduser --uid 1000 -gid 1000 <user>
