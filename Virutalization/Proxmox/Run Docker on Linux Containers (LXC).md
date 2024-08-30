@@ -15,6 +15,20 @@ apt clean && apt update
 apt install -y fuse-overlayfs
 ```
 
+> **_NOTE:_** Make sure default UID/GID are properly configured
+
+```
+Create /etc/subuid and /etc/subgid files with this content:
+
+root:100000:65536
+lxd:100000:65536
+
+Add the following lines to /etc/lxc/default.conf:
+
+lxc.idmap = u 0 100000 65536
+lxc.idmap = g 0 100000 65536
+```
+
 # Create a Linux Container and Test Functionality
 
 ## Create the Linux Container Based on Ubuntu 24.04 (Noble Numbat) Official Template
