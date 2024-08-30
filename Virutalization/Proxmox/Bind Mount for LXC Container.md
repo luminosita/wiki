@@ -2,7 +2,7 @@
 
 Create new LXC container and assign ID. 
 
-> ** IMPORTANT: ** Do not start the container
+> **_IMPORTANT:_** Do not start the container
 
 ### Mounted Folder Accessible in LXC Container
 
