@@ -1,3 +1,7 @@
+### LXC Container
+
+Create new LXC container and assign ID. Do not start the container.
+
 ### Mounted Folder Accessible in LXC Container
 
 For the mounted folder in the host system 
@@ -54,3 +58,4 @@ Host mount /mnt/xxx will be accessible through LXC container as /ct-xxx
 ```
 $ adduser --uid 1000 -gid 1000 <user>
 ```
+
