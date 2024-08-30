@@ -125,6 +125,18 @@ $ python3 PVEDiscordDark.py
 
 Note — — 👏 Thank You Creator 👏 ( So much relief to the eyeballs! )
 
+# Add Default UID/GID
+
+Create /etc/subuid and /etc/subgid files with this content:
+
+root:100000:65536
+lxd:100000:65536
+
+Add the following lines to /etc/lxc/default.conf:
+
+lxc.idmap = u 0 100000 65536
+lxc.idmap = g 0 100000 65536
+
 # Add Storage Drives
 
 ## ZFS Pools
