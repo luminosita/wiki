@@ -1,6 +1,8 @@
 ### LXC Container
 
-Create new LXC container and assign ID. **Do not start the container.**
+Create new LXC container and assign ID. 
+
+> ** IMPORTANT: ** Do not start the container
 
 ### Mounted Folder Accessible in LXC Container
 
