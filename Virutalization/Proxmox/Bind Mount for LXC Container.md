@@ -4,8 +4,6 @@ For the mounted folder in the host system
 
 /mnt/xxx => /dev/sda1
 
-#### NOTE: Important to follow the steps
-
 #### Configure mapping between LXC container and host for user UID/GID 1000:1000 (CT 1000:1000 => host 1000:1000) 
 Edit lxc container config file in `/etc/pve/lxc/` folder
 
