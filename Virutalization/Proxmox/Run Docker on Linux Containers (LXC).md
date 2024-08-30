@@ -9,14 +9,13 @@
 
 > **_NOTE:_** `fuse-overlayfs`  is really only required if your Proxmox node's storage backend is ZFS, as my research indicates that this is a requirement for keeping Docker volume sizes from blowing up
 
-
 ```bash
 apt clean && apt update
 apt install -y fuse-overlayfs
 ```
 
 > **_NOTE:_** Make sure default UID/GID are properly configured
-
+>
 ```
 Create /etc/subuid and /etc/subgid files with this content:
 
