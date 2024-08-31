@@ -116,19 +116,32 @@ $ chmod +x /etc/rc.local
 /etc/rc.local
 ```
 
-# Step 5: Create k3s User
+# Step 5: Setup `k3s` User and SSH Keys
+
+### Create `k3s` User
 
 ```
 $ adduser k3s
 ```
 
-### SSH Keys
+### Setup SSH Keys
 
 Paste SSH public keys into `.ssh/authorized_keys` for `k3s` user
-- root@proxmox
-- proxmox@proxmox
-- milosh@Gianni
-- 
 
-sudoers.d
-- k3s ALL = (ALL) NOPASSWD: ALL
+  - root@proxmox
+  - proxmox@proxmox
+  - milosh@Gianni
+
+### Sudo priviledges for `k3s` user
+
+Create file `k3s` in `/etc/sudoers.d` folder with the following content
+
+```
+k3s ALL = (ALL) NOPASSWD: ALL
+```
+
+# Step 6: Install Required Packages
+
+```
+$ sudo apt install curl
+```
