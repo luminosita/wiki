@@ -115,3 +115,20 @@ After creating this file we setup the permissions and reboot.
 $ chmod +x /etc/rc.local  
 /etc/rc.local
 ```
+
+# Step 5: Create k3s User
+
+```
+$ adduser k3s
+```
+
+### SSH Keys
+
+Paste SSH public keys into `.ssh/authorized_keys` for `k3s` user
+- root@proxmox
+- proxmox@proxmox
+- milosh@Gianni
+- 
+
+sudoers.d
+- k3s ALL = (ALL) NOPASSWD: ALL
