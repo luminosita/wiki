@@ -1,5 +1,6 @@
 ## Table of Content
-
+- [Create Folder TOC File](./Documentation%2FFolder%20TOC.md#create-folder-toc-file)
+- [Table of Content](./Documentation%2FREADME.md#table-of-content)
 - [How to convert Medium to Markdown](./Documentation%2FMedium%2FHow%20to%20convert%20Medium%20to%20Markdown.md#how-to-convert-medium-to-markdown)
   * [Using VSCode keybindings](./Documentation%2FMedium%2FHow%20to%20convert%20Medium%20to%20Markdown.md#using-vscode-keybindings)
   * [Step 1: Basic Medium to Markdown](./Documentation%2FMedium%2FHow%20to%20convert%20Medium%20to%20Markdown.md#step-1-basic-medium-to-markdown)

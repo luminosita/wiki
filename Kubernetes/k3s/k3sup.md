@@ -1,11 +1,11 @@
-  # **Quickly setup a K3s cluster in one minute using k3sup**
+# **Quickly setup a K3s cluster in one minute using k3sup**
 
 
 ![alt text](_assets/1_b8JA75C-5F600U4Y7YkpjA.webp)
 
 Photo by Pixabay from Pexels
 
-# Background
+### Background
 
 In my daily work, in order to facilitate testing in a pure environment, I often need to frequently build and destroy clusters in local or public cloud environments. Sometimes in my HomeLab environment, although the CPU is not powerful, it is better because the memory is large enough. Later, after I got the Azure credit given by Microsoft MVP, I would often set up in Azure virtual machines because there was no network problem of pulling the image. .
 
@@ -23,7 +23,7 @@ A single-node cluster is quite convenient to operate, but when you need a multi-
 
 Then I discovered a faster tool,  [k3sup](https://github.com/alexellis/k3sup)  (pronounced ‘ketchup’) created by Alex Ellis.
 
-# Introduction to k3sup
+### Introduction to k3sup
 
 k3sup is a lightweight tool used to quickly build K3s clusters.
 
@@ -35,7 +35,7 @@ A simple understanding is that k3sup is used to complete a series of operations 
 
 Next we look at how to use k3sup.
 
-# Install k3sup
+### Install k3sup
 
 k3sup is a command line tool. You need to download and install the CLI before using it.
 
@@ -50,7 +50,7 @@ macOS:
 
 brew install k3sup
 
-# Usage
+### Usage
 
 k3sup supports the following commands:
 
@@ -64,7 +64,7 @@ k3sup supports the following commands:
 
 Creating a cluster will use the  `install`  and  `join`  commands.
 
-# Install
+### Install
 
 The  `install`  command is used to install K3s on the server. Use the following command to install k3s on the remote host.
 
@@ -91,7 +91,7 @@ Public IP: 192.168.1.11
 Saving file to: /tmp/config
 ```
 
-# Test your cluster with:  
+### Test your cluster with:  
 ```bash
 $ export KUBECONFIG=/tmp/config  
 $ kubectl config use-context default  
@@ -107,7 +107,7 @@ master   Ready    control-plane,master   1m   v1.24.17+k3s1   10.0.2.4      <non
 ```
 If you are installing a single-node cluster, the  `install`  command is sufficient. If it is a multi-node cluster, you also need to use the  `join`  command.
 
-# Join
+### Join
 
 Use the  `join`  command to initialize the agent node and add it to the current cluster. You need to use  `--server-ip`  to specify the IP address of the server node. You also need to specify  `--k3s-channel`  The installed version, it is strongly recommended to install the same version on the server node.
 
@@ -130,15 +130,15 @@ NAME     STATUS   ROLES                  AGE     VERSION
 node-1   Ready    <none>                 43s   v1.24.17+k3s1  
 master   Ready    control-plane,master   2m58s   v1.24.17+k3s1
 ```
-# Full Scripts
+### Full Scripts
 
 With the help of ChatGPT, generate a script to create a cluster with one click. You can try how long it takes to create a two-node cluster. I tried it and it took about 32 seconds.
 
-# Define IP addresses  
+### Define IP addresses  
 ```bash
 $ export HOSTS="192.168.1.11 192.168.1.12"
 ```
-# Setup Cluster
+### Setup Cluster
 
 ```bash 
 #!/bin/bash  
@@ -173,7 +173,7 @@ done
 echo "k3s cluster installation complete."
 ```
 
-# Cleanup Cluster
+### Cleanup Cluster
 
 ```bash
 #!/bin/bash  
