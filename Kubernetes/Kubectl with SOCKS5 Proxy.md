@@ -1,4 +1,4 @@
-# Run `kubectl` thru SOCKS4 Proxy
+# Run `kubectl` thru SOCKS5 Proxy
 
 ### Create SOCKS5 proxy thru SSH
 
