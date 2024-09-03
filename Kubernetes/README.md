@@ -1,0 +1,13 @@
+## Table of Content
+- [**Quickly setup a K3s cluster in one minute using k3sup**](./Kubernetes%2Fk3s%2Fk3sup.md#quickly-setup-a-k3s-cluster-in-one-minute-using-k3sup)
+- [Background](./Kubernetes%2Fk3s%2Fk3sup.md#background)
+- [Introduction to k3sup](./Kubernetes%2Fk3s%2Fk3sup.md#introduction-to-k3sup)
+- [Install k3sup](./Kubernetes%2Fk3s%2Fk3sup.md#install-k3sup)
+- [Usage](./Kubernetes%2Fk3s%2Fk3sup.md#usage)
+- [Install](./Kubernetes%2Fk3s%2Fk3sup.md#install)
+- [Test your cluster with:](./Kubernetes%2Fk3s%2Fk3sup.md#test-your-cluster-with)
+- [Join](./Kubernetes%2Fk3s%2Fk3sup.md#join)
+- [Full Scripts](./Kubernetes%2Fk3s%2Fk3sup.md#full-scripts)
+- [Define IP addresses](./Kubernetes%2Fk3s%2Fk3sup.md#define-ip-addresses)
+- [Setup Cluster](./Kubernetes%2Fk3s%2Fk3sup.md#setup-cluster)
+- [Cleanup Cluster](./Kubernetes%2Fk3s%2Fk3sup.md#cleanup-cluster)
