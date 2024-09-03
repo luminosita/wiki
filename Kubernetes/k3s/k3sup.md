@@ -66,6 +66,8 @@ Creating a cluster will use the  `install`  and  `join`  commands.
 
 ### Install
 
+> **_NOTE:_** Make sure that hostnames of servers and agents does NOT contain `_` and CAN contain only one `-`
+
 The  `install`  command is used to install K3s on the server. Use the following command to install k3s on the remote host.
 
 Where  `--ip`  points to the address of the remote host,  `--user`  is the username to log in to the remote host,  `--k3s-channel`  is the version to be installed,  `--local-path`  The local storage address of the cluster kubeconf. More options can be viewed via  `k3sup help install`  .
