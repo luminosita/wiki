@@ -52,7 +52,7 @@ Comment out the following line:
 
 I both tested with Ubuntu and Debian, but for Debian it is important that you’re Proxmox version is at least 7.0.0. Else you will get errors…
 
-#### Make the container unprivileged:
+#### Make the container privileged
 
 ![alt text](_assets/1_h_D6X0c_vCZHoWn9szgBVA.webp)
 
