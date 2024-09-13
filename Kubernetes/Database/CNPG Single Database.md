@@ -17,18 +17,6 @@ spec:
   managed:
     services:
       disabledDefaultServices: ["ro", "r"]
-      additional:
-        - selectorType: rw
-          updateStrategy: patch
-          serviceTemplate:
-            metadata:
-              name: "<cluster-name>-rw"
-              labels:
-                test-label: "true"
-              annotations:
-                test-annotation: "true"
-            spec:
-              type: ClusterIP
   storage:
     size: 1G
     pvcTemplate:
@@ -50,9 +38,11 @@ $ kubectl apply -f cnpg.yaml
 
 ```bash
 $ export APP_NS=<app namespace> 
-$ kubectl get secrets <cluster name>-app -n cnpg-database -o json | jq 'del(.metadata["namespace","creationTimestamp","resourceVersion","selfLink","uid","annotations","labels","ownerReferences"])' | \
-      kubeseal --controller-namespace=sealed-secrets -n ${APP_NS} \
-      --format=yaml - > cnpg-config.yaml
+$ export PG_CLUSTER_NAME=<cluster name> 
+$ kubectl get secrets $PG_CLUSTER_NAME-app -n $APP_NS -o json | \
+  jq 'del(.metadata["namespace","creationTimestamp","resourceVersion","selfLink","uid","annotations","labels","ownerReferences"])' | \
+kubeseal --controller-namespace=sealed-secrets -n $APP_NS \
+  --format=yaml - > cnpg-config.yaml
 ```
 
 ### Add new secret into `cnpg.yaml`
@@ -91,7 +81,10 @@ spec:
       . . .
           env:
           - name: DB_HOST
-            value: <cluster name>-rw.cnpg-database
+            valueFrom:
+              secretKeyRef:
+                key: host
+                name: <cluster name>-app        
           - name: DB_PORT
             valueFrom:
               secretKeyRef:
