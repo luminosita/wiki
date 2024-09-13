@@ -16,10 +16,19 @@ spec:
       topology.kubernetes.io/zone: proxmox
   managed:
     services:
-      disabledDefaultServices: [ "ro", "r" ]
+      disabledDefaultServices: ["ro", "r"]
       additional:
         - selectorType: rw
           updateStrategy: patch
+          serviceTemplate:
+            metadata:
+              name: "<cluster-name>-rw"
+              labels:
+                test-label: "true"
+              annotations:
+                test-annotation: "true"
+            spec:
+              type: ClusterIP
   storage:
     size: 1G
     pvcTemplate:
