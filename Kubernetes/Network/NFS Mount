@@ -1,0 +1,354 @@
+# Mounting NFS to a container running on Kubernetes
+
+
+## Overview
+
+In this post I'll take a look at how to set up a simple NFS server on Ubuntu and make use of it in a nginx container running on a Kubernetes cluster
+
+NFS is a file system protocol that allows for sharing files and directories over a network. It has been around for a long time and for many purposes it has been replaced by other more modern storage solutions, but still there are use-cases for it and organizations using it.
+
+NFS is pretty straightforward to set up, you install the server, export a share and away you go. However it seems that there's a lot of struggles around permissions and I have had some issues my self so I thought I'd create a short write up, mostly for my own reference.
+
+Let's start with the server setup
+
+## Install and configure the NFS server
+
+I'm using a freshly installed Ubuntu 20.04 server in this setup
+
+The server has two (virtual) disks, the first one holds the OS installation and the second will be used for the data served by nfs. Note that this is completely optional
+
+### Set up new disk
+
+First I'll set up the second disk
+
+```bash
+1sudo fdisk -l
+2sudo gdisk /dev/sdb
+
+```
+
+bash
+
+Set up a new primary partition by following the defaults
+
+![Create partition](_assets/nfs-kube_create-partition.png)
+
+Create partition
+
+Let's list the partitions to verify that our partition has been created
+
+```bash
+1sudo fdisk -l
+
+```
+
+bash
+
+![New partition created](_assets/nfs-kube_new-partition.png)
+
+New partition created
+
+Now we'll create a filesystem on the partition
+
+```bash
+1sudo mkfs.ext4 /dev/sdb1
+
+```
+
+bash
+
+We'll create a directory on root that we'll mount our disk to
+
+```bash
+1sudo mkdir /nfs
+
+```
+
+bash
+
+And to make this persist reboots we'll edit the  `/etc/fstab`  file to include the mount. First we'll retrive the UUID of the disk with the  `blkid`  command
+
+```bash
+1sudo blkid
+
+```
+
+bash
+
+![UUID of the partition](_assets/nfs-kube_blkid.png)
+
+UUID of the partition
+
+```bash
+1sudo vi /etc/fstab
+
+```
+
+bash
+
+![FSTab file](_assets/nfs-kube_fstab.png)
+
+FSTab file
+
+Now, let's finally mount the disk to the mount point and verify with the  `df`  command
+
+```bash
+1sudo mount -a
+2sudo df -h
+
+```
+
+bash
+
+![Mount disk and verify](_assets/nfs-kube_mount-disk.png)
+
+Mount disk and verify
+
+### Install NFS server[](https://rudimartinsen.com/2022/01/05/nginx-nfs-kubernetes/#install-nfs-server)
+
+```bash
+1sudo apt-get update
+2sudo apt-get install nfs-kernel-server
+
+```
+
+bash
+
+### Configure exports[](https://rudimartinsen.com/2022/01/05/nginx-nfs-kubernetes/#configure-exports)
+
+We'll add our directory to the exports of the server in the  `/etc/exports`  file. For an explanation of the different options take a look at  [this article](https://linuxize.com/post/how-to-install-and-configure-an-nfs-server-on-ubuntu-20-04/#exporting-the-file-systems)
+
+![Exports](_assets/nfs-kube_exports.png)
+
+Exports
+
+Now we need to actually tell the server to export the directory
+
+```bash
+1sudo exportfs -ar
+
+```
+
+bash
+
+We can verify that the directory has been shared with the  `-v`  parameter
+
+```bash
+1sudo exportfs -v
+
+```
+
+bash
+
+![Verify exports](_assets/nfs-kube_verify-exports.png)
+
+Verify exports
+
+On a client I can verify with the  `showmounts`  command
+
+![Show mount from client](_assets/nfs-kube_showmount.png)
+
+Show mount from client
+
+### Configure firewall[](https://rudimartinsen.com/2022/01/05/nginx-nfs-kubernetes/#configure-firewall)
+
+If the firewall is active we need to tell it to allow NFS traffic
+
+```bash
+1sudo ufw allow from 192.168.2.0/24 to any port nfs
+
+```
+
+bash
+
+### Test mount from container[](https://rudimartinsen.com/2022/01/05/nginx-nfs-kubernetes/#test-mount-from-container)
+
+To test the mounting of this directory from a container let's first create a file in the directory.
+
+![Text file created in directory](_assets/nfs-kube_file-in-dir.png)
+
+Text file created in directory
+
+Now let's try to mount the nfs share from a container/pod.
+
+I have a TCE Kubernetes cluster which I've written about  [here](https://rudimartinsen.com/2021/12/28/tce-cluster-vsphere/), and we're using the nginx image for deploying a pod with a container that mounts the nfs directory. Note that we've added a volume and a volumeMount to our yaml spec
+
+```yaml
+ 1apiVersion: v1
+ 2kind: Pod
+ 3metadata:
+ 4  labels:
+ 5    run: nginx
+ 6  name: nginx
+ 7spec:
+ 8  containers:
+ 9  - image: nginx
+10    name: nginx
+11    volumeMounts:
+12    - name: nfs-vol
+13      mountPath: /var/nfs # The mountpoint inside the container
+14  volumes:
+15  - name: nfs-vol
+16    nfs:
+17      server: 192.168.200.90 # IP to our NFS server
+18      path: /nfs # The exported directory
+
+```
+
+yaml
+
+![Mount directory in container](_assets/nfs-kube_mount-dir-in-container.png)
+
+Mount directory in container
+
+Great, it works!
+
+### Permissions and user mapping[](https://rudimartinsen.com/2022/01/05/nginx-nfs-kubernetes/#permissions-and-user-mapping)
+
+A big note with NFS, and what's creating issues for users are the permission and user mappings. Normally an NFS share will not be shared with root access (root_squash) and the user that needs access to the share will need to exist on the NFS server.
+
+Refer to this  [NFS how-to](http://nfs.sourceforge.net/nfs-howto/ar01s07.html#pemission_issues)  for more information
+
+## Use NFS for the static content[](https://rudimartinsen.com/2022/01/05/nginx-nfs-kubernetes/#use-nfs-for-the-static-content)
+
+Now that we know that we can mount a NFS share in the container let's see if we can use it to host our static html files
+
+By default nginx serves files from the  `/usr/share/nginx/html`  directory which we can verify from our running container
+
+![nginx default](_assets/nfs-kube_nginx-default.png)
+
+nginx default
+
+With this knowledge, let's create a new directory for NFS to export, add a static html file to the directory and mount this directory to the directory inside of the container
+
+![Static file on NFS](_assets/nfs-kube_html-file.png)
+
+Static file on NFS
+
+Recreate pod with mountpoint to correct directory
+
+![Mount directory to nginx default html directory](_assets/nfs-kube_mount-www-dir.png)
+
+Mount directory to nginx default html directory
+
+As we can see our container sees the html file, now let's try to see if we can get it to work through http as well.
+
+First we'll expose our pod so that it we can access it from outside the cluster, and then let's open it up in a browser
+
+![Expose pod externally](_assets/nfs-kube_expose-pod.png)
+
+Expose pod externally
+
+![HTML served from NFS](_assets/nfs-kube_page-from-nfs.png)
+
+HTML served from NFS
+
+And if we edit the page on the nfs server, let's see if it updates the page
+
+![Added content to the html file on the NFS server](_assets/nfs-kube_add-content-html.png)
+
+Added content to the html file on the NFS server
+
+And refresh the browser
+
+![Refresh content in browser](_assets/nfs-kube_html-refreshed.png)
+
+Refresh content in browser
+
+## Persistent volumes[](https://rudimartinsen.com/2022/01/05/nginx-nfs-kubernetes/#persistent-volumes)
+
+Finally, let's try to bring in Persistent Volumes and Persistent Volume Claims to the mix which are Kubernetes objects for working with files and directories.
+
+We'll create a Persistent Volume that points to our NFS share
+
+```yaml
+ 1apiVersion: v1
+ 2kind: PersistentVolume
+ 3metadata:
+ 4  name: nfs-www
+ 5spec:
+ 6  storageClassName: ""
+ 7  capacity:
+ 8    storage: 1Gi
+ 9  accessModes:
+10    - ReadWriteMany
+11  persistentVolumeReclaimPolicy:
+12  mountOptions:
+13    - hard
+14    - nfsvers=4.1
+15  nfs:
+16    path: /nfs/www
+17    server: 192.168.200.90
+18    readOnly: false
+
+```
+
+yaml
+
+![Create Persistent volume](_assets/nfs-kube_create-pv.png)
+
+Create Persistent volume
+
+And we'll create a Persistent Volume claim to bind to the PV we just created
+
+```yaml
+ 1apiVersion: v1
+ 2kind: PersistentVolumeClaim
+ 3metadata:
+ 4  name: nfs-www-pvc
+ 5spec:
+ 6  storageClassName: ""
+ 7  volumeName: nfs-www
+ 8  accessModes:
+ 9    - ReadWriteMany
+10  volumeMode: Filesystem
+11  resources:
+12    requests:
+13      storage: 1G
+
+```
+
+yaml
+
+![Create Persistent volume claim](_assets/nfs-kube_create-pvc.png)
+
+Create Persistent volume claim
+
+![Verify PV and PVC](_assets/nfs-kube_verify-pv-pvc.png)
+
+Verify PV and PVC
+
+Now, let's change our pod to use the PVC instead
+
+```yaml
+ 1apiVersion: v1
+ 2kind: Pod
+ 3metadata:
+ 4  labels:
+ 5    run: nginx
+ 6  name: nginx
+ 7spec:
+ 8  containers:
+ 9  - image: nginx
+10    name: nginx
+11    ports:
+12    - containerPort: 80
+13    volumeMounts:
+14    - name: nfs-vol
+15      mountPath: /usr/share/nginx/html
+16  volumes:
+17  - name: nfs-vol
+18    persistentVolumeClaim:
+19      claimName: nfs-www-pvc
+
+```
+
+yaml
+
+![Edit pod spec to use PVC](_assets/nfs-kube_change-to-pvc.png)
+
+Edit pod spec to use PVC
+
+As we can see the only thing we need to change is the volumes part and replace the  `nfs`  stanza with this  `persistentVolumeClaim`  stanza
+
+With this we can reuse the pod spec if we wanted, for instance if we have multiple environments with different NFS servers. The only thing to change then is the PV that points to the NFS server
