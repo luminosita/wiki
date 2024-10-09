@@ -51,6 +51,10 @@ We will use the GithubApp method for authentication.
 
 To create a GitHub App for your organization, replace the ‘:org’ part of the following URL with your organization name before opening it. Then, enter any unique name in the “GitHub App name” field.
 
+[Create GitHub Apps for your profile](https://github.com/settings/apps/new?url=http%3A%2F%2Fgithub.com%2Factions%2Factions-runner-controller&webhook_active=false&public=false&administration=write&organization_self_hosted_runners=write&actions=read&checks=read)
+
+or
+
 [Create GitHub Apps for your organization](https://github.com/organizations/:org/settings/apps/new?url=http%3A%2F%2Fgithub.com%2Factions%2Factions-runner-controller&webhook_active=false&public=false&administration=write&organization_self_hosted_runners=write&actions=read&checks=read).
 
 Select the below-mentioned permission for this app and hit the “Create GitHub App” button at the bottom of the page to create a GitHub App.
@@ -181,7 +185,7 @@ Webhook events are processed by a separate webhook server. The webhook server re
 
 **Register the webhook server to GitHub**
 
-1.  Go to your GitHub organization settings and click on Add Webhook
+1.  Go to your GitHub organization settings or GitHub repository settings, Webhooks and click on Add Webhook
 2.  In the payload URL, add the https endpoint you deployed with the runner controller for your webhook server
 3.  In content type, select application/JSON
 4.  Under the secret button, add a random string that we will use as a webhook secret
@@ -198,11 +202,13 @@ Github console for webhook registration
 
 Selecting the events for webhook
 
+Repeat for each repository
+
 > kubectl command to create secret for webhook token
 
 ```bash
-$ kubectl create secret generic github-selfhosted-webhook-token -n acti\   
-- from-literal=SELFHOSTED_GITHUB_WEBHOOK_SECRET_TOKEN=YOUR_WEBHOOK_SECRET
+$ kubectl create secret generic github-selfhosted-webhook-token -n actions \   
+- from-literal=github_webhook_secret_token=YOUR_WEBHOOK_SECRET
 ```
 
 Upgrade the ARC to enable the webhook server.
