@@ -41,8 +41,8 @@ $ export APP_NS=<app namespace>
 $ export PG_CLUSTER_NAME=<cluster name> 
 $ kubectl get secrets $PG_CLUSTER_NAME-app -n $APP_NS -o json | \
   jq 'del(.metadata["namespace","creationTimestamp","resourceVersion","selfLink","uid","annotations","labels","ownerReferences"])' | \
-kubeseal --controller-namespace=sealed-secrets -n $APP_NS \
-  --format=yaml - > cnpg-config.yaml
+  kubeseal --controller-namespace=sealed-secrets -n $APP_NS \
+    --format=yaml - > cnpg-config.yaml
 ```
 
 ### Add new secret into `cnpg.yaml`
