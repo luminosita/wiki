@@ -4,7 +4,9 @@ To use Cloudflare, you may use one of two types of tokens.  **API Tokens**  allo
 
 **API Tokens**  are recommended for higher security, since they have more restrictive permissions and are more easily revocable.
 
-## API Tokens[](https://cert-manager.io/docs/configuration/acme/dns01/cloudflare/#api-tokens)
+## API Tokens
+
+[Instructions on API Tokens creation](https://cert-manager.io/docs/configuration/acme/dns01/cloudflare/#api-tokens)
 
 Tokens can be created at  **User Profile > API Tokens > API Tokens**. The following settings are recommended:
 
