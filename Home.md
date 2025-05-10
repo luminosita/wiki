@@ -1,4 +1,4 @@
-### [Documentation](<documentation/README.md>)
-### [Kubernetes](<kubernetes/README.md>)
-### [Virutalization](<virutalization/README.md>)
-### [Packer Templates](<packer_templates/README.md>)
+### [Documentation](<docs/README.md>)
+### [Kubernetes](<k8s/README.md>)
+### [Virutalization](<vm/README.md>)
+### [Packer Templates](<packer/README.md>)
