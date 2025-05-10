@@ -2,3 +2,4 @@
 ### [Kubernetes](<k8s/README.md>)
 ### [Virutalization](<vm/README.md>)
 ### [Packer Templates](<packer/README.md>)
+### [Platform](<platform/README.md>)
