@@ -12,7 +12,7 @@ $ ssh-keygen -f ~/.ssh/ca_user_key
 Copy the public key into an appropriate location.
 
 ```bash
-$ scp ~/.ssh/ca_user_key.pub <user>@<ssh server>:/etc/ssh/
+$ scp ~/.ssh/ca_key.pub <user>@<ssh server>:/etc/ssh/
 ```
 
 Update the sshd_config to add the TrustedUserCAKeys option and restart the service.
@@ -20,7 +20,7 @@ Update the sshd_config to add the TrustedUserCAKeys option and restart the servi
 ```bash
 $ vim /etc/ssh/sshd_config
 ...
-TrustedUserCAKeys /etc/ssh/ca_user_key.pub
+TrustedUserCAKeys /etc/ssh/ca_key.pub
 ...
 
 $ systemctl restart sshd
