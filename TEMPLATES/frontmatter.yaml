@@ -1,0 +1,33 @@
+Context:
+```yaml
+title: Article title
+author: AI model name
+date: YYYY-MM-DD
+tags:
+  - tag1
+  - tag2
+categories:
+  - Category1
+  - Category2
+version: 1.0
+status: draft # options: draft, review, published, archived
+description: A brief one-line description of the document
+summary: |
+  Provide a detailed summary of the document here. Include the purpose, scope, key sections, 
+  and any other information that gives a comprehensive overview of the content. 
+  Avoid markdown formatting characters.
+audience:
+  - employees
+  - managers
+  - hr
+related_documents:
+  - document-id-123
+  - document-id-456
+last_reviewed: YYYY-MM-DD
+next_review_due: YYYY-MM-DD
+confidentiality: internal # options: public, internal, confidential, restricted
+owner_department: Department Name
+```
+
+Request: Create markdown file from this chat. Make sure to wrap it as code block. Include frontmatter yaml section using template defined in the context
+Request: Create frontmatter yaml section using template defined in the context
